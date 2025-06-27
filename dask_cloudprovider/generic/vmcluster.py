@@ -54,7 +54,8 @@ class VMInterface(ProcessInterface):
         self.auto_shutdown = True
 
         user_cfg = copy.deepcopy(dask.config.global_config)
-        pruned_cfg = _prune_defaults(user_cfg, dask.config.defaults)
+        all_defaults = dask.config.merge(*dask.config.defaults)
+        pruned_cfg = _prune_defaults(user_cfg, all_defaults)
         serialized = dask.config.serialize(pruned_cfg)
         self.set_env = f'env DASK_INTERNAL_INHERIT_CONFIG=\"{serialized}\"'
 
